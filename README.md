@@ -18,11 +18,11 @@ piHunter will optimize the RaspberryPi to run all of the following tools:
 *Average system mem usage is ~6.50-6.60GB*![Screenshot from 2021-09-13 13-04-09](https://user-images.githubusercontent.com/22893767/133081292-6701d0d7-3a80-4423-863c-80bc48f6fafa.png)
 
 **Hardware/Software list:**
-1. Raspberry Pi 4B 8GB
-2. Micro SD Card 64 GB (128 GB Recommended)
+1. Raspberry Pi 4B 4GB
+2. Micro SD Card 64 GB
 3. [BalenaEtcher](https://www.balena.io/etcher/)
 4. [RaspberryPi OS Lite 64-Bit](https://downloads.raspberrypi.org/raspios_lite_arm64/images/) (Buster version DOES NOT support bullseye)
-  **Tested with 2021-05-07-raspios-buster-arm64-lite.img**
+  NOT **Tested (yet) with 2021-05-07-raspios-buster-arm64-lite.img**
 5. Ethernet Cable (2x)
 6. USB 3.0 Ethernet Adaptor
 7. Switch with Port Mirroring capabilities
@@ -30,7 +30,6 @@ piHunter will optimize the RaspberryPi to run all of the following tools:
 
 **Default Login Credentials:**
 - RaspberryPi -> hunter:pihunter
-- Elastic stack -> elastic:pihunter
 - Arkime -> hunter:pihunter
 
 ### Initial Boot and Configuring the Pi
@@ -47,7 +46,7 @@ In order to get Raspberry Pi OS ready there are some changes we need to make:
 $ sudo apt install git vim -y
 $ sudo apt update -y && sudo apt upgrade -y
 $ sudo reboot
-$ git clone https://github.com/jeffvader84/piHunter
+$ git clone https://github.com/Kymki/piHunter_light
 $ cd piHunter
 ```
  * Edit suricata.yaml.original by creating or editing a HOME_NET with your Private IP range.  Hint: most home routers use a /24 CIDR range.  Ex: 192.168.1.0/24
@@ -69,15 +68,8 @@ ssh hunter@your-static-IP
 ```
 $ tail -f pihunter-boot.log
 ```
-* Watch the log and look for any errors
-* If all services startup properly login to ElasticStack and Arkime
-* Verify data is coming in by going to http://your-static-IP:5601 and http://your-static-IP:8005
-* Start hunting!
 
 ### Screen Shots
-
-## Elastic Stack Login [http://your-static-ip:5601]
-![elastic](https://user-images.githubusercontent.com/22893767/134586340-442d4704-6e17-4e47-964c-0f03f7afd023.PNG)
 
 ## Kibana Dashboard - Zeek
 ![kibana](https://user-images.githubusercontent.com/22893767/134586370-148bb6c7-4021-4e5a-aa6a-63fd0f98947d.PNG)
