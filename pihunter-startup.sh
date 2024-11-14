@@ -7,8 +7,6 @@ SURICATA='suricata'
 ARKIMECAP='arkimecapture'
 ARKIMEVIEW='arkimeviewer'
 FILEBEAT='filebeat'
-KBNAME='kibana'
-ESNAME='elasticsearch'
 MONGOD='mongodb'
 RITAWEB='rita-web'
 LOGDIR='/home/hunter/pihunter-boot.log'
@@ -83,18 +81,12 @@ cmdStart $ZEEK 10
 # start suricata
 sysdStart $SURICATA 10
 
-# start elasticsearch
-dockerStart $ESNAME 120
-
 # start arkime
 sysdStart $ARKIMECAP 30
 sysdStart $ARKIMEVIEW 15
 
 # start filebeat
 sysdStart $FILEBEAT 15
-
-# start kibana
-dockerStart $KBNAME 60
 
 # start mongodb
 dockerStart $MONGOD 10
