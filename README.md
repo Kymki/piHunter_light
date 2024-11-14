@@ -9,7 +9,6 @@ Using the instructions below you can setup a Raspberry Pi to collect full-packet
 piHunter will optimize the RaspberryPi to run all of the following tools:
 
 | Arkime | Suricata | Zeek |
-| ------------- | ------------- | ------------- | ------------- | ------------- |
 | Filebeat | Winlogbeats (TBD)  | RITA  | Run-RITA-Run | tcpdump |
 | tshark | prads | strings | yara | python |
 | scapy | PowerShell | foremost | Nmap |
