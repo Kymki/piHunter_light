@@ -286,14 +286,8 @@ echo "nohook wpa_supplicant" >> /etc/dhcpcd.conf
 # change swappiness value
 echo "vm.swappiness = 10" >> /etc/sysctl.conf
 
-# adjust additional config for elastic stack
-echo "vm.max_map_count = 262144" >> /etc/sysctl.conf
-
 # reload sysctl configs
 sysctl -p
-
-# make adjustments for elastic stack
-echo "hunter - nofile 65536" >> /etc/security/limits.conf
 
 # external storage setup
 logStart "Mount point directory and External Storage setup"
@@ -444,45 +438,7 @@ echo "37 1 * * * sudo suricata-update –disable-conf=/etc/suricata/disable.conf
 
 ldconfig /lib
 logEnd "Suricata install"
-echo "##########################################################################"
-echo "####                      install Elastic Stack                       ####"
-echo "##########################################################################"
-logStart "Elastic Stack"
-#sysctl -w vm.max_map_count=600000
-#if [[ `cat /proc/sys/vm/max_map_count` = 600000 ]]
-#then
-#	echo "Successfully changed vm.max_map_count"
-#else
-#	echo "Failed to change vm.max_map_count"
-#fi
 
-# get elastic stack docker images
-docker pull docker.elastic.co/elasticsearch/elasticsearch:7.13.1-arm64
-docker pull docker.elastic.co/kibana/kibana:7.13.1-arm64
-
-# setup docker network
-docker network create huntnet
-
-# create mount point for storgae
-mkdir -p /hunt-xs/elastic/es-logs
-mkdir -p /hunt-xs/elastic/es-data
-mkdir -p /hunt-xs/elastic/kb-logs
-mkdir -p /hunt-xs/elastic/kb-data
-chown hunter:hunter -R /hunt-xs/elastic
-chmod 777 -R /hunt-xs/elastic
-
-docker run -d --name elasticsearch --net huntnet -p 9200:9200 -p 9300:9300 -v /hunt-xs/elastic/es-data:/usr/share/elasticsearch/data -v /hunt-xs/elastic/es-logs:/usr/share/elasticsearch/logs -e "discovery.type=single-node" -e "xpack.security.enabled=true" -e "ES_JAVA_OPTS=-Xms2g -Xmx2g" -e ELASTIC_PASSWORD=$EPASSWD -e "cluster.name=piHunter" -e "node.name=piHunter.es" docker.elastic.co/elasticsearch/elasticsearch:7.13.1-arm64
-# docker run -d --name elasticsearch --net huntnet -p 9200:9200 -p 9300:9300 -v /hunt-xs/elastic/es-data:/usr/share/elasticsearch/data -v /hunt-xs/elastic/es-logs:/usr/share/elasticsearch/logs -e "discovery.type=single-node" -e "xpack.security.enabled=true" -e ELASTIC_PASSWORD=$EPASSWD -e "cluster.name=piHunter" -e "node.name=piHunter.es" docker.elastic.co/elasticsearch/elasticsearch:7.13.1-arm64
-# sleep to allow elasticsearch container to spin up
-sleep 120
-
-docker run -d --name kibana --net huntnet -p 5601:5601 -v /hunt-xs/elastic/kb-data:/usr/share/kibana/data -v /hunt-xs/elastic/kb-logs:/var/log -e "ELASTICSEARCH_HOSTS=http://elasticsearch:9200" -e "ELASTICSEARCH_URL=http://elasticsearch:9200" -e "xpack.security.enabled=true" -e "ELASTICSEARCH_USERNAME=elastic" -e "ELASTICSEARCH_PASSWORD=$EPASSWD" -e "node.name=piHunter.kb" docker.elastic.co/kibana/kibana:7.13.1-arm64
-# sleep to allow kibana container to spin up
-sleep 90
-
-docker stop kibana
-docker stop elasticsearch
-logEnd "Elastic Stack"
 echo "##########################################################################"
 echo "####                          install Arkime                          ####"
 echo "##########################################################################"
@@ -494,7 +450,7 @@ cd arkime
 
 ./easybutton-build.sh --install
 
-echo -e "$MONINTERFACE\nno\nhttp://localhost:9200\npihunter\nyes" | make config
+echo -e "$MONINTERFACE\nno\nhttp://elastichunter:9200\npihunter\nyes" | make config
 logEnd "Arkime build from source"
 
 mkdir -p /hunt-xs/arkime/raw
@@ -504,10 +460,9 @@ chmod 777 -R /hunt-xs/arkime
 # copy custom config file
 cp /home/pi/piHunter/config.ini.original /opt/arkime/etc/config.ini
 # initiate Arkime
-docker start elasticsearch
 sleep 120
 cd db
-./db.pl http://elastic:pihunter@localhost:9200 init
+./db.pl http://elastic:pihunter@elastichunter:9200 init
 # create default admin user
 /opt/arkime/bin/arkime_add_user.sh hunter "Admin User" $EPASSWD --admin
 
