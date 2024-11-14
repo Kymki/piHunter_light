@@ -1,5 +1,5 @@
 
-# piHunter | Version 1.5.5 (Beta)
+# piHunter_light | Version 1.0.0 (Beta)
 > Data Driven Threat Hunting on the RaspberryPi
 
 ## Utilize open source tools and turn a Raspberry Pi into a threat hunting device.
@@ -8,7 +8,7 @@ Using the instructions below you can setup a Raspberry Pi to collect full-packet
 
 piHunter will optimize the RaspberryPi to run all of the following tools:
 
-| Arkime (Moloch)  | Suricata | Zeek (Bro) | Elasticsearch | Kibana  |
+| Arkime | Suricata | Zeek |
 | ------------- | ------------- | ------------- | ------------- | ------------- |
 | Filebeat | Winlogbeats (TBD)  | RITA  | Run-RITA-Run | tcpdump |
 | tshark | prads | strings | yara | python |
@@ -19,7 +19,6 @@ piHunter will optimize the RaspberryPi to run all of the following tools:
 2. Micro SD Card 64 GB
 3. [BalenaEtcher](https://www.balena.io/etcher/)
 4. [RaspberryPi OS Lite 64-Bit](https://downloads.raspberrypi.org/raspios_lite_arm64/images/) (Buster version DOES NOT support bullseye)
-  NOT **Tested (yet) with 2021-05-07-raspios-buster-arm64-lite.img**
 5. Ethernet Cable (2x)
 6. USB 3.0 Ethernet Adaptor
 7. Switch with Port Mirroring capabilities
@@ -66,13 +65,4 @@ ssh hunter@your-static-IP
 $ tail -f pihunter-boot.log
 ```
 
-### Screen Shots
-
-## Kibana Dashboard - Zeek
-![kibana](https://user-images.githubusercontent.com/22893767/134586370-148bb6c7-4021-4e5a-aa6a-63fd0f98947d.PNG)
-
-## Arkime [http://your-static-ip:8005]
-![arkime](https://user-images.githubusercontent.com/22893767/134586405-4b1b60c9-665a-4539-a1ab-478c388c8d38.PNG)
-
-## RITA HTML Report [http://your-static-ip:8080]
-<img width="1278" alt="Screen Shot 2021-11-18 at 6 44 44 PM" src="https://user-images.githubusercontent.com/22893767/142477504-d11c68de-3f6b-40f0-b92b-2f4cdce5f351.png">
+### Screen Shots - Coming Soon
